@@ -1,21 +1,21 @@
 ---
 - hosts: ipsec
+
+  handlers:
+  - include: handlers.yml
+
   tasks: 
-  - file: dest={{item}} state=directory
-    with_items:
-    - "{{dest_dir}}"
-    - "{{dest_dir}}/manual"
-    - "{{dest_dir}}/manual/{{dest_subdir}}"
-    - "{{dest_dir}}/manual/{{dest_subdir}}/ipsec-tools.d"
-    delegate_to: localhost
 
-  - lineinfile: dest={{dest_dir}}/manual/{{dest_subdir}}/ipsec-tools.conf line="flush;" create=yes
-    delegate_to: localhost
-  - lineinfile: dest={{dest_dir}}/manual/{{dest_subdir}}/ipsec-tools.conf line="spdflush;" create=yes
-    delegate_to: localhost
+  - lineinfile: dest=/etc/ipsec-tools.conf line="flush;" create=yes
+    notify:
+    - setkey restart
 
-  - template: src=templates/ipsec-tools-manual.conf dest={{dest_dir}}/manual/{{dest_subdir}}/ipsec-tools.d/{{item}}.conf
-    delegate_to: localhost
+  - lineinfile: dest=/etc/ipsec-tools.conf line="spdflush;" create=yes
+    notify:
+    - setkey restart
+
+  - template: src=templates/ipsec-tools-manual.conf dest=/etc/ipsec-tools.d/{{item}}.conf
     with_items:
     - "{{groups['ipsec']}}"
-    delegate_to: localhost
+    notify:
+    - setkey restart
