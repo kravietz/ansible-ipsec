@@ -10,33 +10,43 @@ My article [Securing cloud servers with IPSec and Ansible](https://ipsec.pl/node
 * Make sure you have Ansible installed (`pip install ansible` or your Linux distro's equivalent)
 * Checkout the repo:
 
+````
     git checkout https://github.com/kravietz/ansible-ipsec.git
+````
 
 * Run the `racoon.yml` playbook to generate Racoon configuration files for IKE-managed IPSec coniguration:
 
+````
     cd ansible-ipsec
     ansible-playbook -i inventory racoon.yml
+````
 
 The files will generated into the `output/racoon` directory, just as if they would be placed in `/etc`. The following files will be produced:
 
+````
     output/racoon/web1/racoon/racoon.conf
     output/racoon/web1/racoon/pks.txt
     output/racoon/web1/ipsec-tools.conf
     output/racoon/web2... etc
+````
 
 If you now switch to the `prod` branch (`git checkout prod`) and run the same play, it will actually deploy these files to `/etc` on servers listed in `inventory`. It won't work out of the box obviously, as the example inventory has hardcoded dummy IP addresses. The `prod` mode templates will install the configuration files in `/etc` as well as restart `racoon` and `setkey` services. It is also expected that the hostnames in `inventory` are working SSH aliases in production mode.
 
 ## Quick start (manual keying)
 Run the `manual.yml` playbook to generate manual-keyed IPSec configuration:
 
+````
     ansible-playbook -i inventory manual.yml
+````
 
 The files will be found in `output/manual` directory:
 
+````
     output/manual/web1/ipsec-tools.conf
     output/manual/web1/ipsec-tools.d/web2
     output/manual/web1/ipsec-tools.d/web3... etc
     output/manual/web2... etc
+````
 
 For manually-keyed configuration the templates will be saved in `ipsec-tools.d` subdirectory, one file for each remote server, to keep them small and more readable. The `prod` mode here works just as in the Racoon mode, except that Racoon configuration files and `racoon` service are not changed.
 
