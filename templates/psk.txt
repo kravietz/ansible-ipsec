@@ -1,0 +1,9 @@
+{% for hostname in play_hosts %}
+{% if hostname != inventory_hostname %}
+{% set secret=(hostname, inventory_hostname, ipsec_secret) %}
+# secret for connections from {{inventory_hostname}} (this host) and {{hostname}}, generated using
+# SHA256{{secret}}
+{{hostvars[hostname]['ip']}} {{ secret | sort | join | hash('sha256') }}
+
+{% endif %}
+{% endfor %}

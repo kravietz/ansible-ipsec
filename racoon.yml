@@ -1,0 +1,19 @@
+---
+- hosts: ipsec
+  tasks: 
+  - file: dest={{item}} state=directory
+    with_items:
+    - "{{dest_dir}}"
+    - "{{dest_dir}}/{{dest_subdir}}"
+    - "{{dest_dir}}/{{dest_subdir}}/racoon"
+    delegate_to: localhost
+
+  - template: src=templates/ipsec-tools.conf dest={{dest_dir}}/{{dest_subdir}}/ipsec-tools.conf
+    delegate_to: localhost
+  
+  - template: src=templates/racoon.conf dest={{dest_dir}}/{{dest_subdir}}/racoon/racoon.conf
+    delegate_to: localhost
+  
+  - template: src=templates/psk.txt dest={{dest_dir}}/{{dest_subdir}}/racoon/psk.txt
+    delegate_to: localhost
+  

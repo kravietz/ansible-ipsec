@@ -1,0 +1,4 @@
+---
+ipsec_secret: "Your IPSec Secret"
+dest_dir: output
+dest_subdir: "{{inventory_hostname}}"
