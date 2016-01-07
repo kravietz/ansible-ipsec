@@ -4,6 +4,8 @@ This set of [Ansible](http://docs.ansible.com/index.html) templates is an exampl
 
 The repository contains two git branches: `master` which only produces **local** configuration files with lots of debugging output (including plaintext secrets) without atually touching any of the remote servers listed in the example `inventory`. It's safe to run even in the local repo. The `prod` branch will actually install configuration files on remote servers, restart services etc and it won't work unmodified on your network.
 
+My article [Securing cloud servers with IPSec and Ansible](https://ipsec.pl/ipsec/2015/securing-cloud-servers-ipsec-and-ansible.html) discusses this setup in more details.
+
 ## Quick start (Racoon)
 * Make sure you have Ansible installed (`pip install ansible` or your Linux distro's equivalent)
 * Checkout the repo:
