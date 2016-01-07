@@ -22,7 +22,6 @@ The files will generated into the `output/racoon` directory, just as if they wou
     output/racoon/web1/ipsec-tools.conf
     output/racoon/web2... etc
 
-If you now switch to the `prod` branch (`git checkout prod`) and run the same play, it will actually deploy these files to `/etc` on servers listed in `inventory`. It won't work out of the box obviously, as the example inventory has hardcoded dummy IP addresses. The `prod` mode templates will install the configuration files in `/etc` as well as restart `racoon` and `setkey` services. It is also expected that the hostnames in `inventory` are working SSH aliases in production mode.
 
 ## Quick start (manual keying)
 Run the `manual.yml` playbook to generate manual-keyed IPSec configuration:
@@ -37,3 +36,8 @@ The files will be found in `output/manual` directory:
     output/manual/web2... etc
 
 For manually-keyed configuration the templates will be saved in `ipsec-tools.d` subdirectory, one file for each remote server, to keep them small and more readable. The `prod` mode here works just as in the Racoon mode, except that Racoon configuration files and `racoon` service are not changed.
+
+## Production mode
+
+If you now switch to the `prod` branch (`git checkout prod`) and run the same playfiles as above, it will actually deploy the generated files to `/etc` on servers listed in the `inventory` as  well as restart `racoon` and `setkey` services (this will be the moment of truth). It is also expected that the hostnames in `inventory` are working SSH aliases in production mode. The templates will use default IPv4 addresses of each of the listed hosts.
+
