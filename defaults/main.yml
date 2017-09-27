@@ -1,0 +1,23 @@
+---
+# Master IPSec secret, used to securely generate unique pre-shared key for each host pair.
+# This remains the same across all Ansible managed hosts. Use ansible-vault for secure storage.
+# Use 'openssl rand -hex 60' to create new one
+ipsec_secret: 'Your IPSec Secret'
+
+# Values: 'use' or 'require'.
+# 'use' is fail-open policy - if IPSec cannot be established, the traffic will flow unencrypted.
+# 'require' is fail-close policy - not traffic will be allowed without IPSec.
+ipsec_policy: 'use'
+
+# Values: 'ike' or 'setkey'
+# 'ike' is the preferred keying mode with IKE daemon suitable for long-term production environments
+# 'setkey' uses day-dependent static keys which is INSECURE in long term but may be suitable for
+#   development environments with frequent Ansible build that will replace the keys
+ipsec_mode: 'ike'
+
+# No IPSec for ICMP
+ipsec_open_icmp: yes
+        
+# No IPSec for SSH
+ipsec_open_ssh: yes
+
