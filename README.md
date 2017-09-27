@@ -5,6 +5,19 @@ overhead. This role is especially suitable for protecting communications between
 cloud servers and can effectively replace the need for the complexity of configuring TLS for
 each service running on the servers.
 
+## Inventory
+
+Create group `ipsec` and add all hosts that should be IPSec connected:
+
+    [ipsec]
+    test1
+    test2
+
+This role will always create IPSec configuration for full `ipsec` group on each host, regardless
+of current play scope limitation. This is to ensure that scope-limited runs don't leave some
+hosts with IPSec configuration and their counterparts without one, which will cause issues
+with the `require` policy.
+
 ## Confiuration
 
 Master IPSec secret, used as seed to securely generate unique pre-shared key for each host pair.
