@@ -1,4 +1,4 @@
-{% for hostname in groups[s'all'] %}
+{% for hostname in groups['ipsec'] %}
 {% if hostname != inventory_hostname and hostvars[hostname]['ansible_default_ipv4']['address'] is defined %}
 {{hostvars[hostname]['ansible_default_ipv4']['address']}} {{ (hostname, inventory_hostname, ipsec_secret) | sort | join | hash('sha256') }}
 {% endif %}
