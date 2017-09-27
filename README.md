@@ -18,7 +18,17 @@ of current play scope limitation. This is to ensure that scope-limited runs don'
 hosts with IPSec configuration and their counterparts without one, which will cause issues
 with the `require` policy.
 
-## Confiuration
+## Firewall
+
+For IPSec to work the following ports and protocols must be opened:
+
+* `500/udp` IKE (`iptables -A INPUT -p udp --dport 500`)
+* `esp` the ESP protocol (`iptables -A INPUT -p esp`)
+
+These ports should be only opened to the other IPSec peers, there's no need to open them
+publicly.
+
+## Configuration
 
 Master IPSec secret, used as seed to securely generate unique pre-shared key for each host pair.
 This remains the same across all Ansible managed hosts. Use `ansible-vault` for secure storage.
@@ -44,7 +54,8 @@ it allows remote access to IPSec-enabled servers even if something goes wrong wi
         
     ipsec_open_ssh: yes
 
-Never require IPSec for ICMP protocol. 
+Never require IPSec for ICMP protocol. This allows network troubleshooting messages such as ping
+or port unreachable still work between IPSec-enabled hosts.
 
     ipsec_open_icmp: yes
 
