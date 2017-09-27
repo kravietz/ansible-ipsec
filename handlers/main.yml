@@ -2,6 +2,6 @@
 - name: setkey restart
   service: name=setkey state=restarted enabled=true
 
-- name: racoon reload
+- name: racoon restart
   service: name=racoon state=reloaded enabled=true
 
