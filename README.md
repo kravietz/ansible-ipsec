@@ -45,7 +45,8 @@ Keying method.
 * `ike` is the preferred keying mode with IKE daemon managing keys and refreshing them at proper
    intervals, suitable for long-term production environments
 * `setkey` uses day-dependent static keys which is **insecure** in long term but may be suitable for
-  development environments with frequent Ansible builds that will replace the keys
+  development environments with frequent Ansible builds that will replace the keys; the IKE daemon
+  is not used, everything happens on the kernel network stack
 
     ipsec_mode: 'ike'
 
