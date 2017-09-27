@@ -30,7 +30,6 @@ The files will generated into the `output/racoon` directory, just as if they wou
     output/racoon/web2... etc
 ````
 
-If you now switch to the `prod` branch (`git checkout prod`) and run the same play, it will actually deploy these files to `/etc` on servers listed in `inventory`. It won't work out of the box obviously, as the example inventory has hardcoded dummy IP addresses. The `prod` mode templates will install the configuration files in `/etc` as well as restart `racoon` and `setkey` services. It is also expected that the hostnames in `inventory` are working SSH aliases in production mode.
 
 ## Quick start (manual keying)
 Run the `manual.yml` playbook to generate manual-keyed IPSec configuration:
