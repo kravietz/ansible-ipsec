@@ -1,0 +1,26 @@
+---
+- apt: name=ipsec-tools state=present
+
+- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools-manual.conf
+  when: ipsec_mode == 'setkey'
+  notify:
+  - setkey restart
+
+- apt: name=racoon state=present
+  when: ipsec_mode == 'ike'
+
+- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools-ike.conf
+  when: ipsec_mode == 'ike'
+  notify:
+  - setkey restart
+
+- template: src=templates/racoon.conf dest=/etc/racoon/racoon.conf
+  when: ipsec_mode == 'ike'
+  notify:
+  - racoon restart
+
+- template: src=templates/psk.txt dest=/etc/racoon/psk.txt
+  when: ipsec_mode == 'ike'
+  notify:
+  - racoon restart
+
