@@ -1,7 +1,7 @@
 ---
 - apt: name=ipsec-tools state=present
 
-- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools-manual.conf
+- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
   when: ipsec_mode == 'setkey'
   notify:
   - setkey restart
@@ -9,7 +9,7 @@
 - apt: name=racoon state=present
   when: ipsec_mode == 'ike'
 
-- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools-ike.conf
+- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
   when: ipsec_mode == 'ike'
   notify:
   - setkey restart
