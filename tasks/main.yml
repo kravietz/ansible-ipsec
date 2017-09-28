@@ -11,7 +11,7 @@
 - template: src=templates/setkey.service dest=/etc/systemd/system/setkey.service
   when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
 
-- systemd: daemon_reload=yes
+- systemd: name=setkey.service daemon_reload=yes
   when: (ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')) and ansible_service_mgr == 'systemd'
 
 - template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
