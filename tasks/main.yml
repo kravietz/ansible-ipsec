@@ -1,5 +1,12 @@
 ---
 - apt: name=ipsec-tools state=present
+  when: ansible_distribution in ('Debian', 'Ubuntu')
+
+- yum: name={{item}} state=present
+  with_items:
+  - epel-release
+  - ipsec-tools
+  when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
 
 - template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
   when: ipsec_mode == 'setkey'
