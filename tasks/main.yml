@@ -14,8 +14,7 @@
   - setkey restart
 
 - apt: name=racoon state=present
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-  when: ipsec_mode == 'ike'
+  when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
 
 - template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
   when: ipsec_mode == 'ike'
