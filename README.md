@@ -60,4 +60,9 @@ or port unreachable still work between IPSec-enabled hosts.
 
     ipsec_open_icmp: yes
 
+Create IPSec forwarding policies in addition to input and output policies. This is normally only
+needed if you use Docker and other such solutions sending traffic through virtual network interfaces
+that IPSec will consider forwarded traffic. Not needed for regulard host-to-host traffic and 
+disabled by default.
 
+    ipsec_forward: no

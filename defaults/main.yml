@@ -21,3 +21,5 @@ ipsec_open_icmp: yes
 # No IPSec for SSH
 ipsec_open_ssh: yes
 
+# Create forwading SPD entries for Docker-like traffic
+ipsec_forward: no
