@@ -32,7 +32,7 @@
   notify:
   - racoon restart
 
-- template: src=templates/psk.txt dest=/etc/racoon/psk.txt
+- template: src=templates/psk.txt dest=/etc/racoon/psk.txt mode=0600
   when: ipsec_mode == 'ike'
   notify:
   - racoon restart
