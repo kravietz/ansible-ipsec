@@ -1,38 +1,40 @@
 ---
-- apt: name=ipsec-tools state=present
+- name: ipsec-tools installed
+  apt: name=ipsec-tools state=present
   when: ansible_distribution in ('Debian', 'Ubuntu')
 
-- yum: name={{item}} state=present
+- name: ipsec-tools installed from EPEL
+  yum: name={{item}} state=present
   with_items:
   - epel-release
   - ipsec-tools
   when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
 
-- template: src=templates/setkey.service dest=/etc/systemd/system/setkey.service
+- name: setkey service file created
+  template: src=templates/setkey.service dest=/etc/systemd/system/setkey.service
   when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
 
-- systemd: name=setkey.service daemon_reload=yes
+- name: setky service enabled
+  systemd: name=setkey.service daemon_reload=yes
   when: (ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')) and ansible_service_mgr == 'systemd'
 
-- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
-  when: ipsec_mode == 'setkey'
-  notify:
-  - setkey restart
-
-- apt: name=racoon state=present
+- name: racoon installed
+  apt: name=racoon state=present
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
 
-- template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
-  when: ipsec_mode == 'ike'
+- name: ipsec-tools configuration
+  template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf
   notify:
   - setkey restart
 
-- template: src=templates/racoon.conf dest=/etc/racoon/racoon.conf
+- name: racoon configuration
+  template: src=templates/racoon.conf dest=/etc/racoon/racoon.conf
   when: ipsec_mode == 'ike'
   notify:
   - racoon restart
 
-- template: src=templates/psk.txt dest=/etc/racoon/psk.txt mode=0600
+- name: pre-shared keys file
+  template: src=templates/psk.txt dest=/etc/racoon/psk.txt mode=0600
   when: ipsec_mode == 'ike'
   notify:
   - racoon restart
