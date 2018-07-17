@@ -66,3 +66,28 @@ that IPSec will consider forwarded traffic. Not needed for regulard host-to-host
 disabled by default.
 
     ipsec_forward: no
+
+## Key generation
+
+Keys for both `ike` and `setkey` mode are derived from the `ipsec_secret` and a number of other
+paramters to ensure they are unique for each host pair. For `ike` mode keys are stored in
+the `/etc/racoon/psk.txt` file and they are long term keys generated using the following Jinja2
+syntax:
+
+```
+(hostname, inventory_hostname, ipsec_secret) | sort | join | hash('sha256')
+```
+
+The `setkey` mode uses manual keying so keys need to be generated for each direction, and for
+ESP (encryption) and MAC (authentication) separately. In addition, non-secret connection identifiers
+(SPI and IPC) need to be generated for each direction. Playbook run date is included into the key
+input to cycle keys on daily basis (assuming you run Ansible daily). A static key identifier (ESP,
+MAC, SPI, IPC) is also mixed into the key to ensure each key is different.
+
+```
+run_date=(template_run_date['year'], template_run_date['month'], template_run_date['day'])
+( run_date, host1 , host2 , ipsec_secret , "ESP" )   | sort | join | hash('sha256') | truncate(32,end='')
+( run_date, host1 , host2 , ipsec_secret , "MAC" )   | sort | join | hash('sha256') | truncate(64,end='')
+( run_date, host1 , host2 , ipsec_secret , "SPI" )   | sort | join | hash('sha256') | truncate(6,end='')
+( run_date, host1 , host2 , ipsec_secret , "IPC" )   | sort | join | hash('sha256') | truncate(6,end='')
+```
