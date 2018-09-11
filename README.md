@@ -97,6 +97,8 @@ that IPSec will consider forwarded traffic. Not needed for regulard host-to-host
 disabled by default.
 
     ipsec_forward: no
+    
+Note that forwarding traffic only works with IKE keying method.
 
 ## How are keys derived?
 
