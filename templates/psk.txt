@@ -1,5 +1,10 @@
+# {{ansible_managed}}
+# Racoon pre-shared keys for {{inventory_hostname}}
+
 {% for hostname in groups['ipsec'] %}
-{% if hostname != inventory_hostname and hostvars[hostname]['ansible_default_ipv4']['address'] is defined %}
-{{hostvars[hostname]['ansible_default_ipv4']['address']}} {{ (hostname, inventory_hostname, ipsec_secret) | sort | join | hash('sha256') }}
+
+{% if hostname != inventory_hostname and 'ansible_default_ipv4' in hostvars[hostname] %}
+{{hostname}} {{ (hostname, inventory_hostname, ipsec_secret) | sort | join | hash('sha256') }}
 {% endif %}
+
 {% endfor %}
