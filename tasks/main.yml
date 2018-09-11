@@ -39,4 +39,15 @@
   notify:
   - racoon restart
 
+- name: racoon service
+  service: name=racoon state=started enabled=yes
+  when: ipsec_mode == 'ike'
+
+- name: racoon service
+  service: name=racoon state=stopped enabled=no
+  when: ipsec_mode == 'setkey'
+
+- name: setkey service
+  service: name=setkey state=started enabled=yes
+
 
