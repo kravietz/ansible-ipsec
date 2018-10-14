@@ -51,12 +51,22 @@ for guidance on setting variables.
 ### Master secret
 
 Master IPSec secret, used as seed to securely generate unique pre-shared key for each host pair.
-This remains the same across all Ansible managed hosts.
+This remains the same across all Ansible managed hosts. **You must customize this or the whole exercies 
+will make little sense!**
 
     ipsec_secret: '088d7633c620f24... generate your own with openssl rand -hex 60'
     
 Always use [Ansible Vault](https://docs.ansible.com/ansible/latest/cli/ansible-vault.html) to keep the group
 variables files encrypted.
+
+### Address families
+By default SAD/SPD entries will be created for both IPv4 and IPv6. If either of them is not needed, you can delete
+it here but make sure it remains a list. These are Ansible variable names containing IPv4 and IPv6 address
+of the default interface collected during [fact caching](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#fact-caching). 
+
+    ipset_inet:
+    - 'ansible_default_ipv6'
+    - 'ansible_default_ipv4'
 
 ### Traffic encryption policy 
 Should IPSec work in fail-close or fail-open mode? 

@@ -7,6 +7,7 @@ ipsec_secret: 'Your IPSec Secret'
 # Values: 'use' or 'require'.
 # 'use' is fail-open policy - if IPSec cannot be established, the traffic will flow unencrypted.
 # 'require' is fail-close policy - not traffic will be allowed without IPSec.
+# 'disable' - disable IPSec policies at all; can be used as a quick off switch
 ipsec_policy: 'use'
 
 # Values: 'ike' or 'setkey'
@@ -23,3 +24,9 @@ ipsec_open_ssh: yes
 
 # Create forwading SPD entries for Docker-like traffic
 ipsec_forward: no
+
+# Create SPD/SAD entries for which address families? These are Ansible variable names,
+# but they are self-explanatory. Delete one if not required, but make sure it remains a list.
+ipset_inet:
+- 'ansible_default_ipv6'
+- 'ansible_default_ipv4'
