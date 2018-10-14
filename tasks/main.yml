@@ -48,7 +48,7 @@
   when: ipsec_mode == 'setkey'
 
 - name: setkey startup
-  lineinfile: dest=/etc/default/setkey line="RUN_SETKEY=yes" regex="RUN_SETKEY"
+  lineinfile: dest=/etc/default/setkey line="RUN_SETKEY=yes" regexp="RUN_SETKEY"
   when: ansible_distribution in ('Debian', 'Ubuntu')
 
 - name: setkey service
