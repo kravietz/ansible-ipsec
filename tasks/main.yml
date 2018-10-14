@@ -1,13 +1,14 @@
 ---
 - name: ipsec-tools installed
-  apt: name=ipsec-tools state=present
+  apt: name=ipsec-tools
   when: ansible_distribution in ('Debian', 'Ubuntu')
 
+- name: add EPEL repo
+  yum: name=epel-release
+  when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
+
 - name: ipsec-tools installed from EPEL
-  yum: name={{item}} state=present
-  with_items:
-  - epel-release
-  - ipsec-tools
+  yum: name=ipsec-tools
   when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
 
 - name: setkey service file created
