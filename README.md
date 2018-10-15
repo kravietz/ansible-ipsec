@@ -88,13 +88,13 @@ and require IPSec for the current traffic but IKE configuration will remain in p
 
     ipsec_mode: 'ike'
 
-### Open SSH
+### Skip SSH
 Never require IPSec for SSH. The assumption is that SSH provides trusted channel on its own and 
 it allows remote access to IPSec-enabled servers even if something goes wrong with IPSec channels.
         
     ipsec_open_ssh: yes
 
-### Open ICMP
+### Skip ICMP
 Never require IPSec for ICMP protocol. This allows network troubleshooting messages such as ping
 or port unreachable still work between IPSec-enabled hosts.
 
@@ -108,7 +108,16 @@ disabled by default.
 
     ipsec_forward: no
     
-Note that forwarding traffic only works with IKE keying method.
+Note that forwarding traffic only works with IKE keying method and it *may* be tricky as it's more
+things that can go wrong between the virtual interfaces (e.g. routing).
+
+### Compression
+By default IPCOMP (IPSec compression) is enabled as it will bring performance improvement for textual
+data such as SQL and other typical web backend data transfers. When transferring data that is already
+compressed, encrypted or otherwise high-entropy, disable compression as it will increase CPU usage
+and hurt performance.
+
+    ipsec_compress: yes
 
 ## How are keys derived?
 

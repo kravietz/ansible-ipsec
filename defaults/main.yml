@@ -30,3 +30,6 @@ ipsec_forward: no
 ipset_inet:
 - 'ansible_default_ipv6'
 - 'ansible_default_ipv4'
+
+# Enable IPCOMP prior to ESP
+ipsec_compress: yes
