@@ -118,6 +118,8 @@ compressed, encrypted or otherwise high-entropy, disable compression as it will 
 and hurt performance.
 
     ipsec_compress: yes
+    
+Note compression only works in IKE mode.
 
 ## How are keys derived?
 

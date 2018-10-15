@@ -31,5 +31,5 @@ ipset_inet:
 - 'ansible_default_ipv6'
 - 'ansible_default_ipv4'
 
-# Enable IPCOMP prior to ESP
+# Enable IPCOMP prior to ESP. This only works in IKE mode.
 ipsec_compress: yes
