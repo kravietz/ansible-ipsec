@@ -119,8 +119,6 @@ and hurt performance.
 
     ipsec_compress: yes
     
-Note compression only works in IKE mode.
-
 ## How are keys derived?
 
 ### ipsec_secret
