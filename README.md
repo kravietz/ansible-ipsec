@@ -121,28 +121,41 @@ and hurt performance.
 
 ## How are keys derived?
 
-Keys for both `ike` and `setkey` mode are derived from the `ipsec_secret` and endpoint hostnames hashed
-using SHA256 (the strongest hashing function available in `Jinja2` templates). Mixing the hostnames with
-the secret ensures each host pair uses a distinct pre-shared secret for key management and authentication.
+### ipsec_secret
+The `ipsec_secret` constant is a master secret from which all pre-shared secrets for `ike` mode and keys for 'setkey'
+more are generated. The master secret only lives on the deployment server running Ansible and should be protected
+using [Ansible Vault](https://docs.ansible.com/ansible/latest/cli/ansible-vault.html) or similar secret management
+solutions.
 
+Keys for both `ike` and `setkey` mode are derived from the `ipsec_secret` mixed with endpoint hostnames hashed
+using SHA256 (the strongest hashing function available in `Jinja2` templates). This technique of deterministic
+key generation is used to make sure we can create keys that are identical between each pair of servers in the Ansible
+playbook run, but at the same time each pair has a key that is unique and different from others. 
+
+### IKE mode
 For **ike** mode keys are stored in the `/etc/racoon/psk.txt` file and they are long term keys generated
 using the following `Jinja2` syntax:
 
 ```
 (hostname, inventory_hostname, ipsec_secret) | sort | join | hash('sha256')
 ```
-Note that in `ike` mode the pre-shared keu is never used directly in the key exchange process and the IKE protocol
-takes a number of cryptographic precautions to protect it so to the best of my knowledge this key generation
-method is safe for long-term usage in production environments. 
+Note that in `ike` mode the pre-shared key (PSK) is only used for authentication of the two parties and is never
+directly used to encrypt the traffic. After authenticating both ends using PSK, IKE daemon (`racoon`) will then
+securely exchange session keys for ESP and periodically renegotiate them. The IKE protocol can effectively
+manage ESP keys for thousands of SAs at the same time and takes a number of cryptographic precautions to protect
+the PSK in the process, so to the best of my knowledge this key generation method is safe for long-term usage
+in production environments.
 
-The **setkey** mode uses manual keying so keys need to be generated for each direction, and for
-ESP (encryption) and MAC (authentication) separately. In addition, non-secret connection identifiers
-(SPI and IPC) need to be generated for each direction. This is achieved by additionally mixing the 
-`ipsec_secret` with static strings, one for each of the required purposes.
+### Setkey mode 
 
-Playbook run day number is mixed  into the key input to cycle keys on daily basis (assuming you run
-Ansible daily).
+The **setkey** mode uses manual keying in which we need to configure actual raw encryption keys used for
+encryption and authentication of ESP packats. Because we're keying individual SAD entries, for each host pair
+we must produce unique keys for ESP (encryption) and MAC (authentication) separately. and then repeat that
+for return traffic. In addition, non-secret connection identifiers (SPI and IPC) need to be generated in the same
+manner. 
 
+Key purpose diversity is acquired by mixing in static strings ("ESP", "MAC" etc). Then we also add current day
+number so keys will be cycled on subsequent Ansible runs. Obviously, this is much less secure than IKE.
 ```
 run_date=(template_run_date['year'], template_run_date['month'], template_run_date['day'])
 ( run_date, host1 , host2 , ipsec_secret , "ESP" )   | sort | join | hash('sha256') | truncate(32,end='')
