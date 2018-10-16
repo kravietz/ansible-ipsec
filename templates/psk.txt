@@ -4,7 +4,8 @@
 {% for hostname in groups['ipsec'] %}
 
 {% if hostname != inventory_hostname and 'ansible_default_ipv4' in hostvars[hostname] %}
-{{hostname}} {{ (hostname, inventory_hostname, ipsec_secret) | sort | join | hash('sha256') }}
+{% macro pair(h1, h2) %}{{ (h1, h2) | sort | join('.')}}{% endmacro %}
+{{hostname}} {{ ( pair(hostname, inventory_hostname), "PSK256", ipsec_secret) | join('.') | hash('sha256') }}
 {% endif %}
 
 {% endfor %}

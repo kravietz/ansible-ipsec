@@ -134,12 +134,16 @@ playbook run, but at the same time each pair has a key that is unique and differ
 
 ### IKE mode
 For **ike** mode keys are stored in the `/etc/racoon/psk.txt` file and they are long term keys generated
-using the following `Jinja2` syntax:
+using the following pseudo-code:
 
 ```
-(hostname, inventory_hostname, ipsec_secret) | sort | join | hash('sha256')
+PSK = SHA256( SORT(host1, host) || "." || SECRET )
 ```
-Note that in `ike` mode the pre-shared key (PSK) is only used for authentication of the two parties and is never
+The `SORT` operation takes `host` and `host2`, sorts them alphabetically and joins with a full stop ("."). The sole
+purpose of this is to simplify Ansible template generation, which will declare them in different order, depending
+on for which host it currently generates the template.  
+ 
+Note that in `ike` mode the pre-shared key (PSK) is **only** used for authentication of the two parties and is never
 directly used to encrypt the traffic. After authenticating both ends using PSK, IKE daemon (`racoon`) will then
 securely exchange session keys for ESP and periodically renegotiate them. The IKE protocol can effectively
 manage ESP keys for thousands of SAs at the same time and takes a number of cryptographic precautions to protect
@@ -148,8 +152,8 @@ in production environments.
 
 ### Setkey mode 
 
-The **setkey** mode uses manual keying in which we need to configure actual raw encryption keys used for
-encryption and authentication of ESP packats. Because we're keying individual SAD entries, for each host pair
+The **setkey** mode uses manual keying in which we need to configure actual raw encryption keys **directly** used for
+encryption and authentication of network traffic. Because we're keying individual SAD entries, for each host pair
 we must produce unique keys for ESP (encryption) and MAC (authentication) separately. and then repeat that
 for return traffic. In addition, non-secret connection identifiers (SPI and IPC) need to be generated in the same
 manner. 
@@ -157,9 +161,13 @@ manner.
 Key purpose diversity is acquired by mixing in static strings ("ESP", "MAC" etc). Then we also add current day
 number so keys will be cycled on subsequent Ansible runs. Obviously, this is much less secure than IKE.
 ```
-run_date=(template_run_date['year'], template_run_date['month'], template_run_date['day'])
-( run_date, host1 , host2 , ipsec_secret , "ESP" )   | sort | join | hash('sha256') | truncate(32,end='')
-( run_date, host1 , host2 , ipsec_secret , "MAC" )   | sort | join | hash('sha256') | truncate(64,end='')
-( run_date, host1 , host2 , ipsec_secret , "SPI" )   | sort | join | hash('sha256') | truncate(6,end='')
-( run_date, host1 , host2 , ipsec_secret , "IPC" )   | sort | join | hash('sha256') | truncate(6,end='')
+DATE = YEAR || "-" || MM || "-" DD
+AUTH_KEY = SHA256(DATE || "." || SORT(host1, host2) || "." || "MAC" || "." || SECRET) use all 256 bits for HMAC-SHA256
+ENC_KEY  = SHA256(DATE || "." || SORT(host1, host2) || "." || "ESP" || "." || SECRET) truncate to 128 bits for AES-CBC
+SPI = SHA256(DATE || "." || SORT(host1, host2) || "." || "MAC" || "." || SECRET) truncate to 24 bits for SPI
 ```
+
+# Thanks
+
+Thanks to [@koto](https://twitter.com/kkotowicz) and [@mtrojnar](https://twitter.com/mtrojnar) for valuable 
+improvements and suggestions.
