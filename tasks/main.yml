@@ -25,7 +25,7 @@
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
 
 - name: ipsec-tools configuration
-  template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf mode=0600
+  template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf mode=0700 owner=root
   notify:
   - setkey restart
 
