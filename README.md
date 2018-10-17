@@ -164,7 +164,7 @@ number so keys will be cycled on subsequent Ansible runs. Obviously, this is muc
 DATE = YEAR || "-" || MM || "-" DD
 AUTH_KEY = SHA256(DATE || "." || SORT(host1, host2) || "." || "MAC" || "." || SECRET) use all 256 bits for HMAC-SHA256
 ENC_KEY  = SHA256(DATE || "." || SORT(host1, host2) || "." || "ESP" || "." || SECRET) truncate to 128 bits for AES-CBC
-SPI = SHA256(DATE || "." || SORT(host1, host2) || "." || "MAC" || "." || SECRET) truncate to 24 bits for SPI
+SPI = SHA256(DATE || "." || SORT(host1, host2) || "." || "MAC" || "." || SECRET) truncate to 32 bits for SPI
 ```
 
 # Thanks
