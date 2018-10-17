@@ -3,7 +3,7 @@ Description=IPSec policy configuration startup task
 
 [Service]
 Type=oneshot
-ExecStart=/sbin/setkey -f /etc/ipsec-tools.conf
+ExecStart=/usr/bin/env setkey -f /etc/ipsec-tools.conf
 
 [Install]
 WantedBy=multi-user.target
