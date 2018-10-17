@@ -5,11 +5,11 @@
 
 - name: add EPEL repo
   yum: name=epel-release
-  when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
+  when: ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
 
-- name: ipsec-tools installed from EPEL
+- name: ipsec-tools installed
   yum: name=ipsec-tools
-  when: ansible_os_family == 'RedHat' or ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
+  when: ansible_os_family == 'RedHat'
 
 - name: setkey service file created
   template: src=templates/setkey.service dest=/etc/systemd/system/setkey.service
