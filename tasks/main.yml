@@ -22,9 +22,6 @@
   apt: name=racoon state=present
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
 
-- debug: msg='*** We are totally disabling IPSec due to ipsec_policy=disable ***'
-  when: ipsec_policy == 'disable'
-
 - name: ipsec-tools configuration
   template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf mode=0700 owner=root
   notify:
@@ -57,4 +54,5 @@
 - name: setkey service
   service: name=setkey state=started enabled=yes
 
-
+- debug: msg='*** We have just totally disabled IPSec due to ipsec_policy=disable ***'
+  when: ipsec_policy == 'disable'
