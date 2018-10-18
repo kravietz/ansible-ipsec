@@ -22,6 +22,12 @@
   apt: name=racoon state=present
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
 
+- assert:
+    that:
+    - ipsec_policy in ('use','require','disable')
+    - ipsec_mode in ('ike','setkey')
+    - ipsec_secret != 'Your IPSec Secret'
+
 - name: ipsec-tools configuration
   template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf mode=0700 owner=root
   notify:
