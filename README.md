@@ -51,13 +51,17 @@ for guidance on setting variables.
 ### Master secret
 
 Master IPSec secret, used as seed to securely generate unique pre-shared key for each host pair.
-This remains the same across all Ansible managed hosts. **You must customize this or the whole exercies 
+This remains the same across all Ansible managed hosts. **You must customize this or the whole exercise 
 will make little sense!**
 
-    ipsec_secret: '088d7633c620f24... generate your own with openssl rand -hex 60'
+    ipsec_secret: '088d7633c620f24... generate your own with openssl rand -hex 32'
+    
+You can use this command to generate your unique secret:
+
+    openssl rand -hex 32    
     
 Always use [Ansible Vault](https://docs.ansible.com/ansible/latest/cli/ansible-vault.html) to keep the group
-variables files encrypted.
+variables encrypted.
 
 ### Address families
 By default SAD/SPD entries will be created for both IPv4 and IPv6. If either of them is not needed, you can delete
@@ -74,6 +78,8 @@ Should IPSec work in fail-close or fail-open mode?
 * `require` - fail closed: not traffic will be allowed without IPSec
 * `disable` - disable IPSec policies at all; can be used as a quick off switch
 
+Example:
+
     ipsec_policy: 'use'
     
 Note that `disable` will only remove the kernel-level IPSec policies, stopping any attempts to establish
@@ -85,6 +91,8 @@ and require IPSec for the current traffic but IKE configuration will remain in p
 * `setkey` uses day-dependent static keys which is *insecure in long term* but may be suitable for
   development environments with frequent Ansible builds that will replace the keys; the IKE daemon
   is not used, everything happens on the kernel network stack
+  
+Default:
 
     ipsec_mode: 'ike'
 
