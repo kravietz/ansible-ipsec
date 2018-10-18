@@ -1,6 +1,4 @@
 ---
-
-
 - name: add EPEL repo
   yum: name=epel-release
   when: ansible_distribution in ('CentOS', 'Red Hat Enterprise Linux')
@@ -23,6 +21,9 @@
 - name: racoon installed
   apt: name=racoon state=present
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
+
+- debug: msg='*** We are totally disabling IPSec due to ipsec_policy=disable ***'
+  when: ipsec_policy == 'disable'
 
 - name: ipsec-tools configuration
   template: src=templates/ipsec-tools.conf dest=/etc/ipsec-tools.conf mode=0700 owner=root
