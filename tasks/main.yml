@@ -21,7 +21,7 @@
 - name: racoon installed
   apt: name=racoon state=present
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
-
+- debug: msg='ipsec_secret={{ipsec_secret}}'
 - assert:
     that:
     - ipsec_policy in ('use','require','disable')
