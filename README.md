@@ -130,7 +130,7 @@ and hurt performance.
 ## How are keys derived?
 
 ### ipsec_secret
-The `ipsec_secret` constant is a master secret from which all pre-shared secrets for `ike` mode and keys for 'setkey'
+The `ipsec_secret` constant is a master secret from which all pre-shared secrets for `ike` mode and keys for `setkey`
 more are generated. The master secret only lives on the deployment server running Ansible and should be protected
 using [Ansible Vault](https://docs.ansible.com/ansible/latest/cli/ansible-vault.html) or similar secret management
 solutions.
