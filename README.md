@@ -10,6 +10,9 @@ continuous integration environments. The confidentiality of communications depen
 stored in Ansible configuration, that is further used to derive protocol-level secrets. Full rekeying
 of the whole network can be  achieved as a matter of changing the secret and re-running Ansible playbook.
 
+I do offer professional support for the solution, please [contact me](https://webcookies.org/contact/) for
+more information.
+
 ## Changelog
 * v1.1 - full support for IPv6, bugfixes
 * v1.0 - initial release
