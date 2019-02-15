@@ -71,7 +71,7 @@ By default SAD/SPD entries will be created for both IPv4 and IPv6. If either of 
 it here but make sure it remains a list. These are Ansible variable names containing IPv4 and IPv6 address
 of the default interface collected during [fact caching](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#fact-caching). 
 
-    ipset_inet:
+    ipsec_inet:
     - 'ansible_default_ipv6'
     - 'ansible_default_ipv4'
 
