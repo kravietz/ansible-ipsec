@@ -49,10 +49,14 @@
   service: name=racoon state=started enabled=yes
   when: ipsec_mode == 'ike'
 
-- name: racoon service
-  service: name=racoon state=stopped enabled=no
+- name: check if racoon is installed
   when: ipsec_mode == 'setkey'
+  service_facts:
 
+- name: disabling racoon service because ipsec_mode is setkey
+  service: name=racoon state=stopped enabled=no
+  when: "(ipsec_mode == 'setkey') and (ansible_facts.services.racoon is defined)"
+  
 - name: setkey startup
   lineinfile: dest=/etc/default/setkey line="RUN_SETKEY=yes" regexp="RUN_SETKEY"
   when: ansible_distribution in ('Debian', 'Ubuntu')
