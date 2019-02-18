@@ -85,8 +85,13 @@ Example:
 
     ipsec_policy: 'use'
     
-Note that `disable` will only remove the kernel-level IPSec policies, stopping any attempts to establish
+The `disable` flag will only remove the kernel-level IPSec policies, stopping any attempts to establish
 and require IPSec for the current traffic but IKE configuration will remain in place as no-op.
+
+**Important:** the `use` option should be only used in testing for as long as necessary to confirm
+your IPSec associations are working correctly. Specifically, `use` does **not** guarantee that kernel
+will *always* apply IPSec so you may see unencrypted traffic with this option even if IPSec can be
+established.
 
 ### Keying method
 * `ike` is the preferred keying mode with IKE daemon managing keys and refreshing them at proper
