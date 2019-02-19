@@ -38,13 +38,14 @@ must be enabled.
 ## Firewall
 
 These ports should be only opened to the other IPSec peers, there's no need to open them
-publicly.
+publicly (you need to adjust the rules in the `-s ...` parameter). Note that this Ansible
+role **does not** touch the firewall so you need to take care about this on your own.
 
 ### IKE mode
-In `ipsec_mode: ike` the following port and protocol needs to be allowed on firewall:
+In `ipsec_mode: ike` the following port and protocol need to be allowed on firewall:
 
-* `500/udp` IKE (`iptables -A INPUT -p udp --dport 500 -j ACCEPT`)
-* `esp` the ESP protocol (`iptables -A INPUT -p esp -j ACCEPT`)
+* `500/udp` IKE opened by the `racoon` daemon (`iptables -A INPUT -s ... -p udp --dport 500 -j ACCEPT`)
+* `esp` the ESP protocol handled by the kernel (`iptables -A INPUT -s ... -p esp -j ACCEPT`)
 
 ### Setkey mode
 
