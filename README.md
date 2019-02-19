@@ -37,13 +37,20 @@ must be enabled.
 
 ## Firewall
 
-For IPSec to work the following ports and protocols must be opened:
+These ports should be only opened to the other IPSec peers, there's no need to open them
+publicly.
+
+### IKE mode
+In `ipsec_mode: ike` the following port and protocol needs to be allowed on firewall:
 
 * `500/udp` IKE (`iptables -A INPUT -p udp --dport 500 -j ACCEPT`)
 * `esp` the ESP protocol (`iptables -A INPUT -p esp -j ACCEPT`)
 
-These ports should be only opened to the other IPSec peers, there's no need to open them
-publicly.
+### Setkey mode
+
+In `ipsec_mode: setkey` there's no need to open IKE so only `esp` protocol needs to be available:
+
+* `esp` the ESP protocol (`iptables -A INPUT -p esp -j ACCEPT`)
 
 ## Configuration
 
