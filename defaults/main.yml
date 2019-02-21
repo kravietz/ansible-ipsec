@@ -33,3 +33,7 @@ ipsec_inet:
 
 # Enable IPCOMP prior to ESP.
 ipsec_compress: yes
+
+# Ensure traffic to certain ports always goes through IPSec
+# irrespective of the destination ip
+ipsec_secure_ports: []

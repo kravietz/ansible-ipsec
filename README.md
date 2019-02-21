@@ -129,6 +129,19 @@ compressed, encrypted or otherwise high-entropy, disable compression as it will 
 and hurt performance.
 
     ipsec_compress: yes
+
+### "Secure" ports
+IPSec is usually enabled between pairs of known hosts, where it is known that both the hosts have IPSec setup correctly. However, there are times when you want to be 100% sure that traffic to a particular host+port combination is **always encrypted** via IPSec; even if it means that connections from hosts that don't have IPSec enabled, are going to time-out (or get dropped). This is very useful for opening up services/apps which are known to not have encryption enabled at the service/app level, eg. Redis, NFS (without Kerberos), etc -- it prevents unecrypted traffic ever flowing to these apps/services.
+
+```
+    hosts:
+      redis:
+        ipsec_secure_ports:
+          - 6379
+      nfs:
+        ipsec_secure_ports:
+          - 2049
+```
     
 ## How are keys derived?
 
