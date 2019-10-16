@@ -1,8 +1,6 @@
 ---
-- name: Gather and update facts on the hosts in scope
+- name: gather data
   setup:
-  delegate_to: "{{item}}"
-  with_items: "{{groups['ipsec']}}"
 
 - name: add EPEL repo
   yum: name=epel-release
