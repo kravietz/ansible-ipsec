@@ -30,7 +30,8 @@
 - name: display part of ipsec_secret
   debug: msg='ipsec_secret={{ ipsec_secret | truncate(5) }}'
 
-- assert:
+- name: sanity checks
+  assert:
     that:
     - ipsec_policy in ('use','require','disable')
     - ipsec_mode in ('ike','setkey')
