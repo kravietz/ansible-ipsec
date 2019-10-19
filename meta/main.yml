@@ -1,6 +1,7 @@
 galaxy_info:
   author: Pawel Krawczyk
   description: Protect host-to-host traffic with IPSec in transport mode
+  company: WebCookies.org
   license: MIT
   min_ansible_version: 2.2
   platforms:
@@ -16,7 +17,7 @@ galaxy_info:
   - name: EL
     versions:
     - all
-  categories:
+  galaxy_tags:
   - system
   - networking
   - monitoring
