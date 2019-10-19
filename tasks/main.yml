@@ -1,8 +1,8 @@
 ---
 - name: Gather and update facts on the hosts in scope
   setup:
-  delegate_to: "{{item}}"
-  with_items: "{{groups['ipsec']}}"
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['ipsec'] }}"
 
 - name: add EPEL repo
   yum: name=epel-release
@@ -26,7 +26,9 @@
 - name: racoon installed
   apt: name=racoon state=present
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
-- debug: msg='ipsec_secret={{ipsec_secret}}'
+
+- debug: msg='ipsec_secret={{ ipsec_secret }}'
+
 - assert:
     that:
     - ipsec_policy in ('use','require','disable')
@@ -61,7 +63,7 @@
 - name: disabling racoon service because ipsec_mode is setkey
   service: name=racoon state=stopped enabled=no
   when: "(ipsec_mode == 'setkey') and (ansible_facts.services.racoon is defined)"
-  
+
 - name: setkey startup
   lineinfile: dest=/etc/default/setkey line="RUN_SETKEY=yes" regexp="RUN_SETKEY"
   when: ansible_distribution in ('Debian', 'Ubuntu')
