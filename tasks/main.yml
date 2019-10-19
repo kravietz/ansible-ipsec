@@ -27,7 +27,7 @@
   apt: name=racoon state=present
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
 
-- debug: msg='ipsec_secret={{ ipsec_secret }}'
+- debug: msg='ipsec_secret={{ ipsec_secret | truncate(5) }}'
 
 - assert:
     that:
