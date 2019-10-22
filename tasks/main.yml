@@ -26,7 +26,7 @@
   when: ansible_distribution in ('Debian', 'Ubuntu') and ipsec_mode == 'ike'
 
 - name: display part of ipsec_secret
-  debug: msg='ipsec_secret={{ ipsec_secret | string | truncate(5) }}'
+  debug: msg='ipsec_secret={{ ipsec_secret | string | truncate(10) }}'
 
 - name: sanity checks
   assert:
