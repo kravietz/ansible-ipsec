@@ -27,7 +27,7 @@ ipsec_forward: no
 
 # Create SPD/SAD entries for which address families? These are Ansible variable names,
 # but they are self-explanatory. Delete one if not required, but make sure it remains a list.
-ipset_inet:
+ipsec_inet:
 - 'ansible_default_ipv6'
 - 'ansible_default_ipv4'
 
