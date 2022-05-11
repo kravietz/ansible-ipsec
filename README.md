@@ -1,3 +1,5 @@
+**Note:** Since the `ipsec-tools` project has been [discontinued](http://ipsec-tools.sourceforge.net/) and as result the tools [have been removed from Debian](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=932144) and Ubuntu, this project requires a substantial design changes.
+
 # Host-to-host transport-mode IPSec
 
 Ansible role to enable IPSec encryption between Ansible-managed nodes with minimal performance
